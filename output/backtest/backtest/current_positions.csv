@@ -1,0 +1,8 @@
+symbol,shares,entry_price,current_price,market_value,unrealized_pnl,unrealized_pnl_pct,stop_loss,days_held,strategy
+AVGO,21,188.08,188.08,3949.6800000000003,0.0,0.0,138.1,147,adx_breakout
+TSLA,13,289.03,289.03,3757.3899999999994,0.0,0.0,214.25,143,adx_breakout
+JPM,16,247.27,247.27,3956.32,0.0,0.0,202.16,140,adx_breakout
+SPY,3,601.27,601.27,1803.81,0.0,0.0,575.6,100,adx_breakout
+AAPL,11,218.91,218.91,2408.0099999999998,0.0,0.0,201.5,42,adx_breakout
+AMZN,20,234.10000000000002,234.10000000000002,4682.0,0.0,0.0,213.74,14,adx_breakout
+META,6,775.8299999999999,775.8299999999999,4654.98,0.0,0.0,721.73,2,adx_breakout
