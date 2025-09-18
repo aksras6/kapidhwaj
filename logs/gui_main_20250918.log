@@ -1,0 +1,8 @@
+2025-09-18 16:08:02 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 16:08:03 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 16:08:03 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 16:08:03 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 16:08:23 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 16:08:23 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 16:08:54 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 16:09:05 | gui_main     | INFO     | Status: ✅ Backtest complete

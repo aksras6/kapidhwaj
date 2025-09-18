@@ -1,0 +1,29 @@
+2025-09-18 16:08:54 | trading_engine | INFO     | Logger 'trading_engine' initialized. Log file: logs\trading_engine_20250918.log
+2025-09-18 16:08:54 | trading_engine | INFO     | Trading engine initialized | mode=BACKTEST
+2025-09-18 16:08:54 | trading_engine | INFO     | Starting: Initializing trading components
+2025-09-18 16:08:54 | trading_engine | INFO     | All components initialized successfully
+2025-09-18 16:08:54 | trading_engine | INFO     | Completed: Initializing trading components | duration_sec=0.014585
+2025-09-18 16:08:54 | trading_engine | INFO     | Trading session started | mode=BACKTEST
+2025-09-18 16:08:54 | trading_engine | INFO     | Starting: Running backtest
+2025-09-18 16:08:54 | trading_engine | INFO     | Generated mock data for 5 symbols
+2025-09-18 16:08:54 | trading_engine | INFO     | Completed: data_fetch | duration_sec=0.081491
+2025-09-18 16:08:54 | trading_engine | INFO     | Prepared data for 5 symbols with symbol-specific calendars
+2025-09-18 16:08:54 | trading_engine | INFO     | Backtesting over 656 trading days
+2025-09-18 16:08:54 | trading_engine | INFO     | Backtest progress: 0/656 (0.0%)
+2025-09-18 16:08:55 | trading_engine | INFO     | Backtest progress: 50/656 (7.6%)
+2025-09-18 16:08:55 | trading_engine | INFO     | Backtest progress: 100/656 (15.2%)
+2025-09-18 16:08:56 | trading_engine | INFO     | Backtest progress: 150/656 (22.9%)
+2025-09-18 16:08:57 | trading_engine | INFO     | Backtest progress: 200/656 (30.5%)
+2025-09-18 16:08:58 | trading_engine | INFO     | Backtest progress: 250/656 (38.1%)
+2025-09-18 16:08:59 | trading_engine | INFO     | Backtest progress: 300/656 (45.7%)
+2025-09-18 16:09:00 | trading_engine | INFO     | Backtest progress: 350/656 (53.4%)
+2025-09-18 16:09:01 | trading_engine | INFO     | Backtest progress: 400/656 (61.0%)
+2025-09-18 16:09:01 | trading_engine | INFO     | Backtest progress: 450/656 (68.6%)
+2025-09-18 16:09:02 | trading_engine | INFO     | Backtest progress: 500/656 (76.2%)
+2025-09-18 16:09:03 | trading_engine | INFO     | Backtest progress: 550/656 (83.8%)
+2025-09-18 16:09:04 | trading_engine | INFO     | Backtest progress: 600/656 (91.5%)
+2025-09-18 16:09:05 | trading_engine | INFO     | Backtest progress: 650/656 (99.1%)
+2025-09-18 16:09:05 | trading_engine | INFO     | Backtest completed | total_return_pct=-6.464985893605553 | total_trades=53 | win_rate=30.18867924528302
+2025-09-18 16:09:05 | trading_engine | INFO     | Completed: Running backtest | duration_sec=11.580472
+2025-09-18 16:09:05 | trading_engine | INFO     | Stopping trading session...
+2025-09-18 16:09:05 | trading_engine | INFO     | Trading session stopped

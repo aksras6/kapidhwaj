@@ -1,0 +1,11 @@
+2025-09-18 16:08:54 | indicators   | INFO     | Logger 'indicators' initialized. Log file: logs\indicators_20250918.log
+2025-09-18 16:08:54 | indicators   | INFO     | Starting: Adding indicators to MSFT
+2025-09-18 16:08:54 | indicators   | INFO     | Completed: Adding indicators to MSFT | duration_sec=0.014272
+2025-09-18 16:08:54 | indicators   | INFO     | Starting: Adding indicators to NVDA
+2025-09-18 16:08:54 | indicators   | INFO     | Completed: Adding indicators to NVDA | duration_sec=0.009717
+2025-09-18 16:08:54 | indicators   | INFO     | Starting: Adding indicators to AAPL
+2025-09-18 16:08:54 | indicators   | INFO     | Completed: Adding indicators to AAPL | duration_sec=0.015414
+2025-09-18 16:08:54 | indicators   | INFO     | Starting: Adding indicators to AMZN
+2025-09-18 16:08:54 | indicators   | INFO     | Completed: Adding indicators to AMZN | duration_sec=0.016558
+2025-09-18 16:08:54 | indicators   | INFO     | Starting: Adding indicators to GOOGL
+2025-09-18 16:08:54 | indicators   | INFO     | Completed: Adding indicators to GOOGL | duration_sec=0.012622

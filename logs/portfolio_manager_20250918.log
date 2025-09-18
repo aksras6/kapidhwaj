@@ -1,0 +1,7 @@
+2025-09-18 16:08:54 | portfolio_manager | INFO     | Logger 'portfolio_manager' initialized. Log file: logs\portfolio_manager_20250918.log
+2025-09-18 16:08:54 | portfolio_manager | INFO     | Portfolio manager initialized | initial_equity=10000.0
+2025-09-18 16:09:05 | portfolio_manager | INFO     | Exported trades to output/backtest/backtest\portfolio_trades.csv
+2025-09-18 16:09:05 | portfolio_manager | INFO     | Exported RealTest format trades to output/backtest/backtest\trades_realtest_format.csv
+2025-09-18 16:09:05 | portfolio_manager | INFO     | Exported equity curve to output/backtest/backtest\portfolio_equity.csv
+2025-09-18 16:09:05 | portfolio_manager | INFO     | Exported positions to output/backtest/backtest\current_positions.csv
+2025-09-18 16:09:05 | portfolio_manager | INFO     | Exported summary to output/backtest/backtest\portfolio_summary.csv
