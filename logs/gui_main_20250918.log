@@ -6,3 +6,180 @@
 2025-09-18 16:08:23 | gui_main     | INFO     | Successfully connected to IB
 2025-09-18 16:08:54 | gui_main     | INFO     | Status: 📊 Running backtest...
 2025-09-18 16:09:05 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 16:22:46 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 16:22:47 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 16:22:47 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 16:22:47 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 16:22:52 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 16:22:52 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 16:22:56 | gui_main     | INFO     | Status: 💤 Idle
+2025-09-18 16:22:56 | gui_main     | INFO     | Disconnected via UI
+2025-09-18 16:24:16 | gui_main     | INFO     | Application closing
+2025-09-18 16:42:13 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 16:42:14 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 16:42:14 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 16:42:14 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 16:53:18 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 16:53:29 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 16:53:56 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 16:54:08 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 16:54:31 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 16:54:31 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 16:54:38 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 16:54:49 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 16:55:53 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 16:56:04 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:28:51 | gui_main     | INFO     | Application closing
+2025-09-18 17:28:55 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:28:55 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:28:55 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:28:55 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:29:11 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:29:11 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:29:32 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:29:32 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:29:54 | gui_main     | INFO     | Application closing
+2025-09-18 17:29:57 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:29:58 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:29:58 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:29:58 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:30:00 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:30:00 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:30:06 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:30:06 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:32:05 | gui_main     | INFO     | Application closing
+2025-09-18 17:32:15 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:32:17 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:32:17 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:32:17 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:32:19 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:32:19 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:32:25 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:32:26 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:32:59 | gui_main     | INFO     | Application closing
+2025-09-18 17:33:07 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:33:08 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:33:08 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:33:08 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:33:10 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:33:10 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:33:16 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:33:16 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:33:30 | gui_main     | INFO     | Application closing
+2025-09-18 17:34:50 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:34:51 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:34:51 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:34:51 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:34:53 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:34:53 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:34:57 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:34:57 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:35:16 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:35:16 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:36:44 | gui_main     | INFO     | Application closing
+2025-09-18 17:37:18 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:37:19 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:37:19 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:37:19 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:37:27 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:37:28 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:37:28 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:37:28 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:37:30 | gui_main     | INFO     | Application closing
+2025-09-18 17:38:20 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 17:38:21 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 17:38:21 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 17:38:21 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 17:38:23 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 17:38:23 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 17:38:32 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:38:32 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 17:53:04 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 17:53:04 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 18:06:16 | gui_main     | INFO     | Application closing
+2025-09-18 18:07:13 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 18:07:14 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 18:07:14 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 18:07:14 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 18:07:15 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 18:07:15 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 18:07:18 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 18:07:39 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 20:02:52 | gui_main     | INFO     | Status: 💤 Idle
+2025-09-18 20:02:52 | gui_main     | INFO     | Disconnected via UI
+2025-09-18 20:27:38 | gui_main     | INFO     | Application closing
+2025-09-18 20:27:41 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 20:27:42 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 20:27:42 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 20:27:42 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 20:27:52 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 20:27:52 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 20:28:46 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 20:28:46 | gui_main     | INFO     | Backtest starting - checking IB connection:
+2025-09-18 20:28:46 | gui_main     | INFO     |   self.is_connected: True
+2025-09-18 20:28:46 | gui_main     | INFO     |   self.ib_connection: False
+2025-09-18 20:28:46 | gui_main     | ERROR    | ❌ No IB connection available - self.ib_connection is None
+2025-09-18 20:28:46 | gui_main     | ERROR    | ❌ ib_app is None - trading engine will use mock data
+2025-09-18 20:29:05 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 20:34:24 | gui_main     | INFO     | Application closing
+2025-09-18 20:34:25 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 20:34:26 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 20:34:26 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 20:34:26 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 20:34:29 | gui_main     | INFO     | Application closing
+2025-09-18 20:34:45 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 20:34:46 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 20:34:46 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 20:34:46 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 20:34:48 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 20:34:48 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 20:35:13 | gui_main     | INFO     | Status: ❌ IB Connection Test Failed
+2025-09-18 20:35:18 | gui_main     | INFO     | Status: 💤 Idle
+2025-09-18 20:35:18 | gui_main     | INFO     | Disconnected via UI
+2025-09-18 20:35:19 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 20:35:19 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 20:35:51 | gui_main     | INFO     | Status: ❌ IB Connection Test Failed
+2025-09-18 20:37:46 | gui_main     | INFO     | Application closing
+2025-09-18 21:09:44 | gui_main     | INFO     | Logger 'gui_main' initialized. Log file: logs\gui_main_20250918.log
+2025-09-18 21:09:45 | gui_main     | INFO     | All tabs initialized successfully
+2025-09-18 21:09:45 | gui_main     | INFO     | Desktop GUI initialized
+2025-09-18 21:09:45 | gui_main     | INFO     | Starting desktop GUI application
+2025-09-18 21:09:47 | gui_main     | INFO     | Connection requested - starting IB connection process
+2025-09-18 21:09:47 | gui_main     | INFO     | Status: 🔄 Connecting to IB...
+2025-09-18 21:09:47 | gui_main     | INFO     | Attempting IB connection: 127.0.0.1:7497
+2025-09-18 21:09:47 | gui_main     | INFO     | ✅ IB connection established successfully
+2025-09-18 21:09:47 | gui_main     | INFO     | Status: 📡 Connected to IB
+2025-09-18 21:09:47 | gui_main     | INFO     | Successfully connected to IB
+2025-09-18 21:09:47 | gui_main     | INFO     | IB connection stored: app=True, gateway=True
+2025-09-18 21:09:47 | gui_main     | INFO     | IB app connected: True
+2025-09-18 21:10:01 | gui_main     | INFO     | ✅ IB connection validated - starting backtest
+2025-09-18 21:10:01 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 21:10:01 | gui_main     | INFO     | Backtest starting - checking IB connection:
+2025-09-18 21:10:01 | gui_main     | INFO     |   self.is_connected: True
+2025-09-18 21:10:01 | gui_main     | INFO     |   self.ib_connection: True
+2025-09-18 21:10:01 | gui_main     | INFO     |   IB connection type: <class 'tuple'>
+2025-09-18 21:10:01 | gui_main     | INFO     |   IB app: True
+2025-09-18 21:10:01 | gui_main     | INFO     |   IB gateway: True
+2025-09-18 21:10:01 | gui_main     | INFO     |   IB app connected: True
+2025-09-18 21:10:01 | gui_main     | INFO     | ✅ Extracted IB app from tuple: True
+2025-09-18 21:10:01 | gui_main     | INFO     | ✅ IB app is connected: True
+2025-09-18 21:10:01 | gui_main     | INFO     | ✅ Passing IB app to trading engine
+2025-09-18 21:10:41 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 21:13:19 | gui_main     | INFO     | ✅ IB connection validated - starting backtest
+2025-09-18 21:13:19 | gui_main     | INFO     | Status: 📊 Running backtest...
+2025-09-18 21:13:19 | gui_main     | INFO     | Backtest starting - checking IB connection:
+2025-09-18 21:13:19 | gui_main     | INFO     |   self.is_connected: True
+2025-09-18 21:13:19 | gui_main     | INFO     |   self.ib_connection: True
+2025-09-18 21:13:19 | gui_main     | INFO     |   IB connection type: <class 'tuple'>
+2025-09-18 21:13:19 | gui_main     | INFO     |   IB app: True
+2025-09-18 21:13:19 | gui_main     | INFO     |   IB gateway: True
+2025-09-18 21:13:19 | gui_main     | INFO     |   IB app connected: True
+2025-09-18 21:13:19 | gui_main     | INFO     | ✅ Extracted IB app from tuple: True
+2025-09-18 21:13:19 | gui_main     | INFO     | ✅ IB app is connected: True
+2025-09-18 21:13:19 | gui_main     | INFO     | ✅ Passing IB app to trading engine
+2025-09-18 21:14:48 | gui_main     | INFO     | Status: ✅ Backtest complete
+2025-09-18 21:16:14 | gui_main     | INFO     | Status: 💤 Idle
+2025-09-18 21:16:14 | gui_main     | INFO     | Disconnected from IB
+2025-09-18 21:16:14 | gui_main     | INFO     | Status: 💤 Idle
+2025-09-18 21:16:14 | gui_main     | INFO     | Disconnected via UI
+2025-09-18 21:16:29 | gui_main     | INFO     | Application closing

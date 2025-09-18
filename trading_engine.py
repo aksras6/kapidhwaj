@@ -95,33 +95,37 @@ class TradingEngine:
     
     def initialize_components(self, ib_app=None):
         """Initialize all trading components"""
-        
         with LoggingContext(self.logger, "Initializing trading components"):
-            
-            # Set IB app if provided
-            if ib_app:
-                self.ib_app = ib_app
-            
-            # Initialize data manager
-            self.data_manager = DataManager(self.config, self.ib_app)
-            
-            # Initialize signal manager
-            self.signal_manager = SignalManager(self.config)
-            
-            # Initialize portfolio manager
-            initial_equity = self.config.ACCOUNT_SIZE
-            self.portfolio_manager = PortfolioManager(self.config, initial_equity)
-            
-            # Initialize live order manager for paper/live modes
-            if self.mode in [TradingMode.PAPER, TradingMode.LIVE] and self.ib_app:
-                try:
-                    from live_order_manager import LiveOrderManager
-                    self.order_manager = LiveOrderManager(self.config, self.ib_app)
-                    self.logger.info("Live order manager initialized")
-                except ImportError:
-                    self.logger.warning("Live order manager not available")
-            
-            self.logger.info("All components initialized successfully")
+            try:
+                # CRITICAL FIX: Store IB app connection
+                if ib_app:
+                    self.ib_app = ib_app  # ← This was missing or not working!
+                    self.logger.info("IB app connection established for trading engine")
+                else:
+                    self.logger.warning("No IB app provided - will use mock data")
+                    self.ib_app = None
+                
+                # Initialize data manager with IB connection
+                self.data_manager = DataManager(self.config, self.ib_app)
+                if self.ib_app:
+                    self.data_manager.set_ib_app(self.ib_app)
+                
+                # Initialize signal manager
+                self.signal_manager = SignalManager(self.config)
+                
+                # Initialize portfolio manager  
+                self.portfolio_manager = PortfolioManager(self.config)
+                
+                # Initialize performance logger
+                self.perf_logger = PerformanceLogger(self.logger)
+                
+                self.logger.info("All components initialized successfully")
+                return True
+                
+            except Exception as e:
+                self.logger.error(f"Failed to initialize components: {e}")
+                self.state = EngineState.ERROR
+                return False
     
     def start_session(self, session_name: str = None) -> bool:
         """Start a new trading session"""
@@ -208,17 +212,9 @@ class TradingEngine:
                 self.session_history = self.session_history[-50:]
     
     def run_backtest(self, symbols: List[str] = None, 
-                    start_date: str = None, end_date: str = None) -> Dict[str, any]:
+                start_date: str = None, end_date: str = None) -> Dict[str, any]:
         """
         Run historical backtest
-        
-        Args:
-            symbols: List of symbols to backtest (uses config default if None)
-            start_date: Start date (YYYY-MM-DD)
-            end_date: End date (YYYY-MM-DD)
-            
-        Returns:
-            Backtest results dictionary
         """
         
         if not self.start_session("backtest"):
@@ -231,15 +227,43 @@ class TradingEngine:
                 if not symbols:
                     symbols = self.config.SYMBOLS
                 
+                self.logger.info(f"Backtest parameters: symbols={symbols}, start={start_date}, end={end_date}")
+                
+                # CRITICAL: Log IB connection status
+                if self.ib_app:
+                    self.logger.info("✅ USING REAL IB DATA - IB connection available")
+                else:
+                    self.logger.warning("⚠️ USING MOCK DATA - No IB connection")
+                
                 # Fetch historical data
                 self.perf_logger.start_timer("data_fetch")
                 
                 if self.ib_app:
-                    # Fetch from IB
-                    data_by_symbol = self.data_manager.get_multiple_symbols(symbols)
+                    # Try to fetch from IB
+                    self.logger.info("Attempting to fetch real market data from IB...")
+                    try:
+                        data_by_symbol = self.data_manager.get_multiple_symbols(symbols)
+                        
+                        # Validate we got real data
+                        if data_by_symbol and any(not df.empty for df in data_by_symbol.values()):
+                            self.logger.info("✅ Successfully fetched REAL IB data")
+                            # Log data details
+                            for symbol, df in data_by_symbol.items():
+                                if not df.empty:
+                                    start_actual = df.index.min().strftime('%Y-%m-%d')
+                                    end_actual = df.index.max().strftime('%Y-%m-%d')
+                                    self.logger.info(f"  {symbol}: {len(df)} bars from {start_actual} to {end_actual}")
+                        else:
+                            self.logger.error("❌ IB data fetch returned empty - falling back to mock")
+                            data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
+                            
+                    except Exception as e:
+                        self.logger.error(f"❌ IB data fetch failed: {e} - falling back to mock")
+                        data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
                 else:
-                    # For testing without IB - generate mock data
-                    data_by_symbol = self._generate_mock_data(symbols)
+                    # Generate mock data
+                    self.logger.warning("⚠️ Generating MOCK data (not real market data)")
+                    data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
                 
                 self.perf_logger.end_timer("data_fetch")
                 
@@ -248,6 +272,10 @@ class TradingEngine:
                 
                 # Run backtest simulation
                 results = self._run_backtest_simulation(data_by_symbol, start_date, end_date)
+                
+                # Add data source info to results
+                results["data_source"] = "IB_REAL" if self.ib_app else "MOCK"
+                results["data_warning"] = None if self.ib_app else "⚠️ Using mock data - results not realistic"
                 
                 # Export results
                 if self.portfolio_manager:
@@ -261,6 +289,7 @@ class TradingEngine:
         
         finally:
             self.stop_session()
+
     
     def _run_backtest_simulation(self, data_by_symbol: Dict[str, pd.DataFrame], 
                                 start_date: str = None, end_date: str = None) -> Dict[str, any]:
@@ -988,15 +1017,31 @@ class TradingEngine:
                         cash_pct=summary["risk"].get("cash_pct", 0),
                         total_return_pct=summary["equity"]["total_return_pct"])
     
-    def _generate_mock_data(self, symbols: List[str]) -> Dict[str, pd.DataFrame]:
+    def _generate_mock_data(
+    self,
+    symbols: List[str],
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+) -> Dict[str, pd.DataFrame]:
         """Generate mock data for testing without IB connection"""
+        # FIX: Use provided date range or reasonable defaults
+        if not start_date:
+            start_date = "2023-01-01"
+        if not end_date:
+            end_date = "2024-12-31"
+        
+        self.logger.info(f"Generating mock data for date range: {start_date} to {end_date}")
         
         data_by_symbol = {}
         
         for symbol in symbols[:5]:  # Limit to 5 symbols for testing
-            # Generate random walk data
-            dates = pd.date_range(start="2023-01-01", end="2024-12-31", freq="D")
+            # Generate date range from parameters
+            dates = pd.date_range(start=start_date, end=end_date, freq="D")
             n = len(dates)
+            
+            if n == 0:
+                self.logger.warning(f"Invalid date range: {start_date} to {end_date}")
+                continue
             
             # Random walk for prices
             returns = np.random.normal(0.0005, 0.02, n)  # Slight positive drift

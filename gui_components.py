@@ -157,9 +157,26 @@ Setup Instructions:
         # Trigger connection through callback
         self.connection_callback(True)
 
+    # Enhanced disconnect method in ConnectionTab class in gui_components.py:
+
     def disconnect(self):
         """Handle disconnect button."""
-        self.connection_callback(False)
+        try:
+            # Update UI immediately to show disconnecting state
+            self.status_label.config(text="🔄 Disconnecting...")
+            self.disconnect_btn.config(state="disabled")
+            
+            # Log the disconnect attempt
+            self.logger.info("User initiated disconnect")
+            
+            # Trigger actual disconnection through callback
+            self.connection_callback(False)
+            
+        except Exception as e:
+            self.logger.error(f"Error during disconnect: {e}")
+            # Reset UI on error
+            self.disconnect_btn.config(state="normal")
+            self.status_label.config(text="🔴 Disconnect Error")
 
     def on_connection_change(self, connected: bool):
         """Update UI based on connection status."""
@@ -167,10 +184,12 @@ Setup Instructions:
             self.status_label.config(text="🟢 Connected")
             self.connect_btn.config(state="disabled")
             self.disconnect_btn.config(state="normal")
+            self.logger.info("Connection established")
         else:
             self.status_label.config(text="⚫ Disconnected")
             self.connect_btn.config(state="normal")
             self.disconnect_btn.config(state="disabled")
+            self.logger.info("Connection terminated")
 
 
 class StrategyTab:
@@ -560,21 +579,23 @@ class BacktestTab:
             anchor="w", pady=(0, 10)
         )
 
-        # Date range
+        # Date range - UPDATED DEFAULTS
         date_frame = ttk.LabelFrame(parent, text="Date Range", padding=10)
         date_frame.pack(fill="x", pady=(0, 10))
 
         ttk.Label(date_frame, text="Start Date:").grid(row=0, column=0, sticky="w", pady=2)
-        self.start_date_var = tk.StringVar(value="2020-01-01")
-        ttk.Entry(date_frame, textvariable=self.start_date_var, width=15).grid(
-            row=0, column=1, padx=(10, 0), pady=2
-        )
+        # FIX: Use more recent start date
+        self.start_date_var = tk.StringVar(value="2023-01-01")  
+        start_entry = ttk.Entry(date_frame, textvariable=self.start_date_var, width=15)
+        start_entry.grid(row=0, column=1, padx=(10, 0), pady=2)
 
         ttk.Label(date_frame, text="End Date:").grid(row=1, column=0, sticky="w", pady=2)
-        self.end_date_var = tk.StringVar(value="2024-12-31")
-        ttk.Entry(date_frame, textvariable=self.end_date_var, width=15).grid(
-            row=1, column=1, padx=(10, 0), pady=2
-        )
+        # FIX: Use current date as default
+        from datetime import datetime
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        self.end_date_var = tk.StringVar(value=current_date)
+        end_entry = ttk.Entry(date_frame, textvariable=self.end_date_var, width=15)
+        end_entry.grid(row=1, column=1, padx=(10, 0), pady=2)
 
         # Capital
         capital_frame = ttk.LabelFrame(parent, text="Capital", padding=10)
@@ -754,6 +775,25 @@ class BacktestTab:
     def run_backtest(self):
         """Run backtest with current parameters."""
         try:
+            # Validate date inputs
+            start_date = self.start_date_var.get().strip()
+            end_date = self.end_date_var.get().strip()
+            
+            # Validate date format
+            try:
+                from datetime import datetime
+                datetime.strptime(start_date, "%Y-%m-%d")
+                datetime.strptime(end_date, "%Y-%m-%d")
+            except ValueError:
+                messagebox.showerror("Date Error", 
+                                "Please use YYYY-MM-DD format for dates")
+                return
+            
+            if start_date >= end_date:
+                messagebox.showerror("Date Error", 
+                                "Start date must be before end date")
+                return
+            
             symbols_text = self.symbols_text.get("1.0", "end-1c").strip()
             symbols = [s.strip().upper() for s in symbols_text.split(",") if s.strip()]
 
@@ -763,8 +803,8 @@ class BacktestTab:
 
             params = {
                 "symbols": symbols,
-                "start_date": self.start_date_var.get(),
-                "end_date": self.end_date_var.get(),
+                "start_date": start_date,  # Now properly passed
+                "end_date": end_date,      # Now properly passed
                 "initial_capital": float(self.capital_var.get()),
                 "channel_length": int(self.channel_var.get()),
                 "adx_length": int(self.adx_len_var.get()),
@@ -787,39 +827,75 @@ class BacktestTab:
             messagebox.showerror("Error", f"Failed to start backtest: {e}")
 
     def display_results(self, results):
-        """Display backtest results."""
+        """Display backtest results with data source warnings."""
         try:
-            # Stop progress
+            # Stop progress and reset button
             self.progress.stop()
             self.run_btn.config(state="normal", text="🚀 Run Backtest")
 
+            # Handle errors
             if "error" in results:
                 messagebox.showerror("Backtest Error", results["error"])
                 return
 
-            # Display summary
-            self.display_summary(results)
+            # Check data source and prepare warning
+            data_source = results.get("data_source", "UNKNOWN")
+            data_warning = results.get("data_warning", "")
+            
+            # Clear previous results
+            self.summary_text.config(state="normal")
+            self.summary_text.delete("1.0", "end")
+            
+            # Clear trades tree
+            for item in self.trades_tree.get_children():
+                self.trades_tree.delete(item)
 
-            # Display trades
+            # Add header with data source info
+            header = "BACKTEST RESULTS\n" + "="*50 + "\n\n"
+            
+            if data_source == "MOCK":
+                header += "🚨 WARNING: USING MOCK DATA (NOT REAL MARKET DATA)\n"
+                header += "Connect to Interactive Brokers for real historical data\n"
+                header += "Results below are artificial and not realistic!\n\n"
+            elif data_source == "IB_REAL":
+                header += "✅ Using real Interactive Brokers historical data\n\n"
+            elif data_source == "UNKNOWN":
+                header += "⚠️ Data source unknown - verify data quality\n\n"
+            
+            # Add data warning if present
+            if data_warning:
+                header += f"{data_warning}\n\n"
+            
+            self.summary_text.insert("1.0", header)
+
+            # Display summary results
+            self.display_summary(results)
+            
+            # Display trades in the tree
             self.display_trades(results)
 
-            # Switch to summary tab
+            # Switch to summary tab to show results
             self.results_notebook.select(self.summary_frame)
 
         except Exception as e:
             self.logger.error(f"Error displaying results: {e}")
             messagebox.showerror("Display Error", f"Error displaying results: {e}")
+            
+            # Reset UI on error
+            self.progress.stop()
+            self.run_btn.config(state="normal", text="🚀 Run Backtest")
+
 
     def display_summary(self, results):
-        """Display summary statistics."""
+        """Display summary statistics in the summary text widget."""
         summary = results.get("summary", {})
         performance = results.get("performance", {})
         comp_stats = results.get("comprehensive_stats", {})
 
-        # Format summary text
-        summary_text = "BACKTEST RESULTS\n" + "=" * 50 + "\n\n"
+        # Build summary text
+        summary_text = ""
 
-        # Comprehensive stats if available
+        # Comprehensive stats if available (RealTest format)
         if comp_stats:
             summary_text += "🎯 COMPREHENSIVE STATISTICS\n" + "-" * 30 + "\n"
             summary_text += f"Test: {comp_stats.get('test_name', 'ADX Breakout Strategy')}\n"
@@ -863,23 +939,30 @@ class BacktestTab:
             summary_text += f"Max Drawdown: {performance.get('max_drawdown', 0) * 100:.2f}%\n"
             summary_text += f"Volatility: {performance.get('volatility', 0) * 100:.2f}%\n"
             summary_text += f"Sharpe Ratio: {performance.get('sharpe_ratio', 0):.2f}\n"
-            summary_text += f"Calmar Ratio: {performance.get('calmar_ratio', 0):.2f}\n"
+            summary_text += f"Calmar Ratio: {performance.get('calmar_ratio', 0):.2f}\n\n"
 
-        # Display in text widget
-        self.summary_text.config(state="normal")
-        self.summary_text.delete("1.0", "end")
-        self.summary_text.insert("1.0", summary_text)
+        # Append to existing content in summary_text widget
+        self.summary_text.insert("end", summary_text)
         self.summary_text.config(state="disabled")
 
+
     def display_trades(self, results):
-        """Display individual trades."""
+        """Display individual trades in the trades tree."""
         # Clear existing trades
         for item in self.trades_tree.get_children():
             self.trades_tree.delete(item)
 
         trades = results.get("trades", [])
+        
+        if not trades:
+            # Add a placeholder row if no trades
+            self.trades_tree.insert("", "end", values=(
+                "No trades", "", "", "", "", "", "", ""
+            ))
+            return
 
         for trade in trades:
+            # Format trade data for display
             values = (
                 trade.get("symbol", ""),
                 trade.get("entry_date", ""),
@@ -892,12 +975,15 @@ class BacktestTab:
             )
             self.trades_tree.insert("", "end", values=values)
 
+
     def clear_results(self):
         """Clear previous results."""
+        # Clear summary text
         self.summary_text.config(state="normal")
         self.summary_text.delete("1.0", "end")
         self.summary_text.config(state="disabled")
 
+        # Clear trades tree
         for item in self.trades_tree.get_children():
             self.trades_tree.delete(item)
 

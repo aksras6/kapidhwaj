@@ -316,20 +316,30 @@ class DataManager:
     
     def get_multiple_symbols(self, symbols: List[str], force_refresh: bool = False) -> Dict[str, pd.DataFrame]:
         """Get data for multiple symbols efficiently"""
-        with LoggingContext(self.logger, f"Fetching {len(symbols)} symbols"):
+        with LoggingContext(self.logger, f"Fetching {len(symbols)} symbols from IB"):
             results = {}
+            
+            if not self.ib_app:
+                self.logger.error("Cannot fetch from IB - no connection")
+                return results
             
             for symbol in symbols:
                 try:
+                    self.logger.info(f"Fetching {symbol} from IB...")
                     data = self.get_latest_data(symbol, force_refresh)
+                    
                     if not data.empty:
                         results[symbol] = data
+                        start_date = data.index.min().strftime('%Y-%m-%d') 
+                        end_date = data.index.max().strftime('%Y-%m-%d')
+                        self.logger.info(f"✅ {symbol}: {len(data)} bars ({start_date} to {end_date})")
                     else:
-                        self.logger.warning(f"No data for {symbol}")
+                        self.logger.warning(f"❌ {symbol}: No data returned from IB")
+                        
                 except Exception as e:
-                    self.logger.error(f"Failed to get data for {symbol}", error=str(e))
+                    self.logger.error(f"Failed to fetch {symbol}: {e}")
             
-            self.logger.info(f"Successfully fetched {len(results)}/{len(symbols)} symbols")
+            self.logger.info(f"Fetched data for {len(results)}/{len(symbols)} symbols")
             return results
     
     def refresh_all_cached_data(self):

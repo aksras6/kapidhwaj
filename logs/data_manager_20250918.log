@@ -1,2 +1,194 @@
 2025-09-18 16:08:54 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
 2025-09-18 16:08:54 | data_manager | INFO     | DataManager initialized
+2025-09-18 16:53:18 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 16:53:18 | data_manager | INFO     | DataManager initialized
+2025-09-18 16:53:56 | data_manager | INFO     | DataManager initialized
+2025-09-18 16:54:38 | data_manager | INFO     | DataManager initialized
+2025-09-18 16:55:53 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:29:11 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:29:11 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:30:06 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:30:06 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:32:25 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:32:25 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:33:16 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:33:16 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:34:57 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:34:57 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:35:16 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:38:32 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 17:38:32 | data_manager | INFO     | DataManager initialized
+2025-09-18 17:53:04 | data_manager | INFO     | DataManager initialized
+2025-09-18 18:07:18 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 18:07:18 | data_manager | INFO     | DataManager initialized
+2025-09-18 20:28:46 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 20:28:46 | data_manager | INFO     | DataManager initialized
+2025-09-18 21:10:01 | data_manager | INFO     | Logger 'data_manager' initialized. Log file: logs\data_manager_20250918.log
+2025-09-18 21:10:01 | data_manager | INFO     | DataManager initialized
+2025-09-18 21:10:01 | data_manager | INFO     | IB app connected to DataManager
+2025-09-18 21:10:01 | data_manager | INFO     | Starting: Fetching 13 symbols from IB
+2025-09-18 21:10:01 | data_manager | INFO     | Fetching MSFT from IB...
+2025-09-18 21:10:01 | data_manager | INFO     | Starting: Getting data for MSFT
+2025-09-18 21:10:02 | data_manager | INFO     | Completed: fetch_MSFT | duration_sec=1.309811
+2025-09-18 21:10:02 | data_manager | INFO     | Fetched 1506 bars for MSFT
+2025-09-18 21:10:02 | data_manager | INFO     | Completed: Getting data for MSFT | duration_sec=1.328259
+2025-09-18 21:10:02 | data_manager | INFO     | ✅ MSFT: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:02 | data_manager | INFO     | Fetching NVDA from IB...
+2025-09-18 21:10:02 | data_manager | INFO     | Starting: Getting data for NVDA
+2025-09-18 21:10:03 | data_manager | INFO     | Completed: fetch_NVDA | duration_sec=1.304695
+2025-09-18 21:10:03 | data_manager | INFO     | Fetched 1506 bars for NVDA
+2025-09-18 21:10:03 | data_manager | INFO     | Completed: Getting data for NVDA | duration_sec=1.319308
+2025-09-18 21:10:03 | data_manager | INFO     | ✅ NVDA: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:03 | data_manager | INFO     | Fetching AAPL from IB...
+2025-09-18 21:10:03 | data_manager | INFO     | Starting: Getting data for AAPL
+2025-09-18 21:10:05 | data_manager | INFO     | Completed: fetch_AAPL | duration_sec=1.279158
+2025-09-18 21:10:05 | data_manager | INFO     | Fetched 1506 bars for AAPL
+2025-09-18 21:10:05 | data_manager | INFO     | Completed: Getting data for AAPL | duration_sec=1.310969
+2025-09-18 21:10:05 | data_manager | INFO     | ✅ AAPL: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:05 | data_manager | INFO     | Fetching AMZN from IB...
+2025-09-18 21:10:05 | data_manager | INFO     | Starting: Getting data for AMZN
+2025-09-18 21:10:06 | data_manager | INFO     | Completed: fetch_AMZN | duration_sec=1.281605
+2025-09-18 21:10:06 | data_manager | INFO     | Fetched 1506 bars for AMZN
+2025-09-18 21:10:06 | data_manager | INFO     | Completed: Getting data for AMZN | duration_sec=1.297615
+2025-09-18 21:10:06 | data_manager | INFO     | ✅ AMZN: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:06 | data_manager | INFO     | Fetching GOOGL from IB...
+2025-09-18 21:10:06 | data_manager | INFO     | Starting: Getting data for GOOGL
+2025-09-18 21:10:07 | data_manager | INFO     | Completed: fetch_GOOGL | duration_sec=1.267024
+2025-09-18 21:10:07 | data_manager | INFO     | Fetched 1506 bars for GOOGL
+2025-09-18 21:10:07 | data_manager | INFO     | Completed: Getting data for GOOGL | duration_sec=1.281442
+2025-09-18 21:10:07 | data_manager | INFO     | ✅ GOOGL: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:07 | data_manager | INFO     | Fetching META from IB...
+2025-09-18 21:10:07 | data_manager | INFO     | Starting: Getting data for META
+2025-09-18 21:10:09 | data_manager | INFO     | Completed: fetch_META | duration_sec=1.531677
+2025-09-18 21:10:09 | data_manager | INFO     | Fetched 1506 bars for META
+2025-09-18 21:10:09 | data_manager | INFO     | Completed: Getting data for META | duration_sec=1.550163
+2025-09-18 21:10:09 | data_manager | INFO     | ✅ META: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:09 | data_manager | INFO     | Fetching AVGO from IB...
+2025-09-18 21:10:09 | data_manager | INFO     | Starting: Getting data for AVGO
+2025-09-18 21:10:10 | data_manager | INFO     | Completed: fetch_AVGO | duration_sec=1.320972
+2025-09-18 21:10:10 | data_manager | INFO     | Fetched 1506 bars for AVGO
+2025-09-18 21:10:10 | data_manager | INFO     | Completed: Getting data for AVGO | duration_sec=1.334976
+2025-09-18 21:10:10 | data_manager | INFO     | ✅ AVGO: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:10 | data_manager | INFO     | Fetching TSLA from IB...
+2025-09-18 21:10:10 | data_manager | INFO     | Starting: Getting data for TSLA
+2025-09-18 21:10:11 | data_manager | INFO     | Completed: fetch_TSLA | duration_sec=1.26231
+2025-09-18 21:10:11 | data_manager | INFO     | Fetched 1506 bars for TSLA
+2025-09-18 21:10:11 | data_manager | INFO     | Completed: Getting data for TSLA | duration_sec=1.277451
+2025-09-18 21:10:11 | data_manager | INFO     | ✅ TSLA: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:11 | data_manager | INFO     | Fetching WMT from IB...
+2025-09-18 21:10:11 | data_manager | INFO     | Starting: Getting data for WMT
+2025-09-18 21:10:13 | data_manager | INFO     | Completed: fetch_WMT | duration_sec=1.149092
+2025-09-18 21:10:13 | data_manager | INFO     | Fetched 1506 bars for WMT
+2025-09-18 21:10:13 | data_manager | INFO     | Completed: Getting data for WMT | duration_sec=1.164077
+2025-09-18 21:10:13 | data_manager | INFO     | ✅ WMT: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:13 | data_manager | INFO     | Fetching JPM from IB...
+2025-09-18 21:10:13 | data_manager | INFO     | Starting: Getting data for JPM
+2025-09-18 21:10:14 | data_manager | INFO     | Completed: fetch_JPM | duration_sec=1.310083
+2025-09-18 21:10:14 | data_manager | INFO     | Fetched 1506 bars for JPM
+2025-09-18 21:10:14 | data_manager | INFO     | Completed: Getting data for JPM | duration_sec=1.32604
+2025-09-18 21:10:14 | data_manager | INFO     | ✅ JPM: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:14 | data_manager | INFO     | Fetching V from IB...
+2025-09-18 21:10:14 | data_manager | INFO     | Starting: Getting data for V
+2025-09-18 21:10:15 | data_manager | INFO     | Completed: fetch_V | duration_sec=1.276938
+2025-09-18 21:10:15 | data_manager | INFO     | Fetched 1506 bars for V
+2025-09-18 21:10:15 | data_manager | INFO     | Completed: Getting data for V | duration_sec=1.291078
+2025-09-18 21:10:15 | data_manager | INFO     | ✅ V: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:15 | data_manager | INFO     | Fetching SPY from IB...
+2025-09-18 21:10:15 | data_manager | INFO     | Starting: Getting data for SPY
+2025-09-18 21:10:16 | data_manager | INFO     | Completed: fetch_SPY | duration_sec=1.303305
+2025-09-18 21:10:16 | data_manager | INFO     | Fetched 1506 bars for SPY
+2025-09-18 21:10:16 | data_manager | INFO     | Completed: Getting data for SPY | duration_sec=1.316589
+2025-09-18 21:10:16 | data_manager | INFO     | ✅ SPY: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:16 | data_manager | INFO     | Fetching BRK.A from IB...
+2025-09-18 21:10:16 | data_manager | INFO     | Starting: Getting data for BRK.A
+2025-09-18 21:10:18 | data_manager | INFO     | Completed: fetch_BRK.A | duration_sec=1.26314
+2025-09-18 21:10:18 | data_manager | INFO     | Fetched 1506 bars for BRK.A
+2025-09-18 21:10:18 | data_manager | INFO     | Completed: Getting data for BRK.A | duration_sec=1.277878
+2025-09-18 21:10:18 | data_manager | INFO     | ✅ BRK.A: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:10:18 | data_manager | INFO     | Fetched data for 13/13 symbols
+2025-09-18 21:10:18 | data_manager | INFO     | Completed: Fetching 13 symbols from IB | duration_sec=17.09562
+2025-09-18 21:10:41 | data_manager | INFO     | Cleaned up 13 old symbols
+2025-09-18 21:13:19 | data_manager | INFO     | DataManager initialized
+2025-09-18 21:13:19 | data_manager | INFO     | IB app connected to DataManager
+2025-09-18 21:13:19 | data_manager | INFO     | Starting: Fetching 13 symbols from IB
+2025-09-18 21:13:19 | data_manager | INFO     | Fetching MSFT from IB...
+2025-09-18 21:13:19 | data_manager | INFO     | Starting: Getting data for MSFT
+2025-09-18 21:13:20 | data_manager | INFO     | Completed: fetch_MSFT | duration_sec=1.340818
+2025-09-18 21:13:20 | data_manager | INFO     | Fetched 1506 bars for MSFT
+2025-09-18 21:13:20 | data_manager | INFO     | Completed: Getting data for MSFT | duration_sec=1.357916
+2025-09-18 21:13:20 | data_manager | INFO     | ✅ MSFT: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:20 | data_manager | INFO     | Fetching NVDA from IB...
+2025-09-18 21:13:20 | data_manager | INFO     | Starting: Getting data for NVDA
+2025-09-18 21:13:21 | data_manager | INFO     | Completed: fetch_NVDA | duration_sec=1.259373
+2025-09-18 21:13:21 | data_manager | INFO     | Fetched 1506 bars for NVDA
+2025-09-18 21:13:21 | data_manager | INFO     | Completed: Getting data for NVDA | duration_sec=1.274442
+2025-09-18 21:13:21 | data_manager | INFO     | ✅ NVDA: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:21 | data_manager | INFO     | Fetching AAPL from IB...
+2025-09-18 21:13:21 | data_manager | INFO     | Starting: Getting data for AAPL
+2025-09-18 21:13:23 | data_manager | INFO     | Completed: fetch_AAPL | duration_sec=1.300101
+2025-09-18 21:13:23 | data_manager | INFO     | Fetched 1506 bars for AAPL
+2025-09-18 21:13:23 | data_manager | INFO     | Completed: Getting data for AAPL | duration_sec=1.315311
+2025-09-18 21:13:23 | data_manager | INFO     | ✅ AAPL: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:23 | data_manager | INFO     | Fetching AMZN from IB...
+2025-09-18 21:13:23 | data_manager | INFO     | Starting: Getting data for AMZN
+2025-09-18 21:13:24 | data_manager | INFO     | Completed: fetch_AMZN | duration_sec=1.294285
+2025-09-18 21:13:24 | data_manager | INFO     | Fetched 1506 bars for AMZN
+2025-09-18 21:13:24 | data_manager | INFO     | Completed: Getting data for AMZN | duration_sec=1.312255
+2025-09-18 21:13:24 | data_manager | INFO     | ✅ AMZN: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:24 | data_manager | INFO     | Fetching GOOGL from IB...
+2025-09-18 21:13:24 | data_manager | INFO     | Starting: Getting data for GOOGL
+2025-09-18 21:13:25 | data_manager | INFO     | Completed: fetch_GOOGL | duration_sec=1.317505
+2025-09-18 21:13:25 | data_manager | INFO     | Fetched 1506 bars for GOOGL
+2025-09-18 21:13:25 | data_manager | INFO     | Completed: Getting data for GOOGL | duration_sec=1.331974
+2025-09-18 21:13:25 | data_manager | INFO     | ✅ GOOGL: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:25 | data_manager | INFO     | Fetching META from IB...
+2025-09-18 21:13:25 | data_manager | INFO     | Starting: Getting data for META
+2025-09-18 21:13:27 | data_manager | INFO     | Completed: fetch_META | duration_sec=1.493646
+2025-09-18 21:13:27 | data_manager | INFO     | Fetched 1506 bars for META
+2025-09-18 21:13:27 | data_manager | INFO     | Completed: Getting data for META | duration_sec=1.507638
+2025-09-18 21:13:27 | data_manager | INFO     | ✅ META: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:27 | data_manager | INFO     | Fetching AVGO from IB...
+2025-09-18 21:13:27 | data_manager | INFO     | Starting: Getting data for AVGO
+2025-09-18 21:13:28 | data_manager | INFO     | Completed: fetch_AVGO | duration_sec=1.263993
+2025-09-18 21:13:28 | data_manager | INFO     | Fetched 1506 bars for AVGO
+2025-09-18 21:13:28 | data_manager | INFO     | Completed: Getting data for AVGO | duration_sec=1.277841
+2025-09-18 21:13:28 | data_manager | INFO     | ✅ AVGO: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:28 | data_manager | INFO     | Fetching TSLA from IB...
+2025-09-18 21:13:28 | data_manager | INFO     | Starting: Getting data for TSLA
+2025-09-18 21:13:29 | data_manager | INFO     | Completed: fetch_TSLA | duration_sec=1.159668
+2025-09-18 21:13:29 | data_manager | INFO     | Fetched 1506 bars for TSLA
+2025-09-18 21:13:29 | data_manager | INFO     | Completed: Getting data for TSLA | duration_sec=1.176861
+2025-09-18 21:13:29 | data_manager | INFO     | ✅ TSLA: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:29 | data_manager | INFO     | Fetching WMT from IB...
+2025-09-18 21:13:29 | data_manager | INFO     | Starting: Getting data for WMT
+2025-09-18 21:13:31 | data_manager | INFO     | Completed: fetch_WMT | duration_sec=1.425185
+2025-09-18 21:13:31 | data_manager | INFO     | Fetched 1506 bars for WMT
+2025-09-18 21:13:31 | data_manager | INFO     | Completed: Getting data for WMT | duration_sec=1.445182
+2025-09-18 21:13:31 | data_manager | INFO     | ✅ WMT: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:31 | data_manager | INFO     | Fetching JPM from IB...
+2025-09-18 21:13:31 | data_manager | INFO     | Starting: Getting data for JPM
+2025-09-18 21:13:32 | data_manager | INFO     | Completed: fetch_JPM | duration_sec=1.270983
+2025-09-18 21:13:32 | data_manager | INFO     | Fetched 1506 bars for JPM
+2025-09-18 21:13:32 | data_manager | INFO     | Completed: Getting data for JPM | duration_sec=1.288574
+2025-09-18 21:13:32 | data_manager | INFO     | ✅ JPM: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:32 | data_manager | INFO     | Fetching V from IB...
+2025-09-18 21:13:32 | data_manager | INFO     | Starting: Getting data for V
+2025-09-18 21:13:33 | data_manager | INFO     | Completed: fetch_V | duration_sec=1.316626
+2025-09-18 21:13:33 | data_manager | INFO     | Fetched 1506 bars for V
+2025-09-18 21:13:33 | data_manager | INFO     | Completed: Getting data for V | duration_sec=1.3333
+2025-09-18 21:13:33 | data_manager | INFO     | ✅ V: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:33 | data_manager | INFO     | Fetching SPY from IB...
+2025-09-18 21:13:33 | data_manager | INFO     | Starting: Getting data for SPY
+2025-09-18 21:13:35 | data_manager | INFO     | Completed: fetch_SPY | duration_sec=1.292133
+2025-09-18 21:13:35 | data_manager | INFO     | Fetched 1506 bars for SPY
+2025-09-18 21:13:35 | data_manager | INFO     | Completed: Getting data for SPY | duration_sec=1.306272
+2025-09-18 21:13:35 | data_manager | INFO     | ✅ SPY: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:35 | data_manager | INFO     | Fetching BRK.A from IB...
+2025-09-18 21:13:35 | data_manager | INFO     | Starting: Getting data for BRK.A
+2025-09-18 21:13:36 | data_manager | INFO     | Completed: fetch_BRK.A | duration_sec=1.289377
+2025-09-18 21:13:36 | data_manager | INFO     | Fetched 1506 bars for BRK.A
+2025-09-18 21:13:36 | data_manager | INFO     | Completed: Getting data for BRK.A | duration_sec=1.307686
+2025-09-18 21:13:36 | data_manager | INFO     | ✅ BRK.A: 1506 bars (2019-09-20 to 2025-09-17)
+2025-09-18 21:13:36 | data_manager | INFO     | Fetched data for 13/13 symbols
+2025-09-18 21:13:36 | data_manager | INFO     | Completed: Fetching 13 symbols from IB | duration_sec=17.255412
+2025-09-18 21:14:48 | data_manager | INFO     | Cleaned up 13 old symbols

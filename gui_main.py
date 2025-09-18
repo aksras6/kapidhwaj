@@ -262,10 +262,10 @@ class TradingSystemGUI:
         """Connect to Interactive Brokers"""
         if not IB_AVAILABLE:
             messagebox.showerror("IB Not Available", 
-                               "Interactive Brokers API is not available.\n"
-                               "Please ensure ibapi_appv1.py is in the application directory.")
+                            "Interactive Brokers API is not available.\n"
+                            "Please ensure ibapi_appv1.py is in the application directory.")
             return
-        
+            
         def connect_thread():
             try:
                 self.update_status("🔄 Connecting to IB...")
@@ -279,17 +279,23 @@ class TradingSystemGUI:
                     self.config.IB_CLIENT_ID
                 )
                 
-                gateway.start(timeout_sec=10)
+                self.logger.info(f"Attempting IB connection: {self.config.IB_HOST}:{self.config.IB_PAPER_PORT}")
+                gateway.start(wait_sec=10)
                 
                 # Store connection
                 self.ib_connection = (app, gateway)
                 self.is_connected = True
+                
+                self.logger.info("✅ IB connection established successfully")
                 
                 # Update UI on main thread
                 self.root.after(0, self.on_connection_success)
                 
             except Exception as e:
                 self.logger.error(f"Connection failed: {e}")
+                # Clear connection state on failure
+                self.ib_connection = None
+                self.is_connected = False
                 self.root.after(0, lambda: self.on_connection_error(str(e)))
         
         # Start connection in background thread
@@ -316,6 +322,13 @@ class TradingSystemGUI:
         self.update_status("📡 Connected to IB")
         self.logger.info("Successfully connected to IB")
         
+        # Log connection details for debugging
+        if self.ib_connection:
+            app, gateway = self.ib_connection
+            self.logger.info(f"IB connection stored: app={app is not None}, gateway={gateway is not None}")
+            if app:
+                self.logger.info(f"IB app connected: {app.isConnected()}")
+        
         # Notify tabs
         if hasattr(self, 'connection_tab'):
             self.connection_tab.on_connection_change(True)
@@ -326,15 +339,42 @@ class TradingSystemGUI:
         """Handle IB connection error"""
         self.update_connection_status("🔴 Error", "red")
         self.update_status("❌ Connection Failed")
+        
+        # Ensure connection state is cleared
+        self.ib_connection = None
+        self.is_connected = False
+        
+        # Notify tabs about failure
+        if hasattr(self, 'connection_tab'):
+            self.connection_tab.on_connection_change(False)
+        if hasattr(self, 'live_tab'):
+            self.live_tab.on_connection_change(False)
+        
         messagebox.showerror("Connection Error", f"Failed to connect to IB:\n{error_msg}")
     
+    # Find the on_connection_change method in gui_main.py and replace it with this fixed version:
+
     def on_connection_change(self, connected):
         """Callback for connection status changes"""
-        self.is_connected = connected
         if connected:
-            self.on_connection_success()
+            # ACTUALLY START THE IB CONNECTION!
+            self.logger.info("Connection requested - starting IB connection process")
+            self.connect_ib()  # This will do the actual IB connection
         else:
+            # Handle disconnection - actually disconnect from IB
+            self.disconnect_ib()
+            
+            # Update UI status
             self.update_connection_status("⚫ Disconnected", "black")
+            self.update_status("💤 Idle")
+            
+            # Notify tabs about disconnection
+            if hasattr(self, 'connection_tab'):
+                self.connection_tab.on_connection_change(False)
+            if hasattr(self, 'live_tab'):
+                self.live_tab.on_connection_change(False)
+            
+            self.logger.info("Disconnected via UI")
     
     # ===== TRADING OPERATIONS =====
     
@@ -345,10 +385,39 @@ class TradingSystemGUI:
             self.backtest_tab.run_backtest()
     
     def run_backtest_callback(self, params):
-        """Callback for backtest execution"""
+        """Callback for backtest execution with enhanced IB connection debugging"""
+
+            # TEST IB CONNECTION FIRST
+        if not self.test_ib_connection_before_backtest():
+            # Connection test failed - abort backtest
+            self.update_status("❌ IB Connection Test Failed")
+            
+            # Reset backtest tab UI
+            if hasattr(self, 'backtest_tab'):
+                self.backtest_tab.progress.stop()
+                self.backtest_tab.run_btn.config(state="normal", text="🚀 Run Backtest")
+            return
+        
+        # Connection is good, proceed with backtest
+        self.logger.info("✅ IB connection validated - starting backtest")
+
         def backtest_thread():
             try:
                 self.update_status("📊 Running backtest...")
+                
+                # DEBUG: Check IB connection status
+                self.logger.info(f"Backtest starting - checking IB connection:")
+                self.logger.info(f"  self.is_connected: {self.is_connected}")
+                self.logger.info(f"  self.ib_connection: {self.ib_connection is not None}")
+                
+                if self.ib_connection:
+                    self.logger.info(f"  IB connection type: {type(self.ib_connection)}")
+                    if isinstance(self.ib_connection, tuple):
+                        app, gateway = self.ib_connection
+                        self.logger.info(f"  IB app: {app is not None}")
+                        self.logger.info(f"  IB gateway: {gateway is not None}")
+                        if app:
+                            self.logger.info(f"  IB app connected: {app.isConnected()}")
                 
                 # Create trading engine
                 engine = create_trading_engine("backtest", {
@@ -357,10 +426,27 @@ class TradingSystemGUI:
                     "ACCOUNT_SIZE": params.get("initial_capital", self.config.ACCOUNT_SIZE)
                 })
                 
-                # Initialize with IB connection if available
+                # Initialize with IB connection if available - WITH DEBUGGING
                 ib_app = None
                 if self.ib_connection:
-                    ib_app, _ = self.ib_connection
+                    if isinstance(self.ib_connection, tuple):
+                        ib_app, gateway = self.ib_connection
+                        self.logger.info(f"✅ Extracted IB app from tuple: {ib_app is not None}")
+                        if ib_app and hasattr(ib_app, 'isConnected'):
+                            self.logger.info(f"✅ IB app is connected: {ib_app.isConnected()}")
+                        else:
+                            self.logger.error("❌ IB app missing or no isConnected method")
+                    else:
+                        ib_app = self.ib_connection
+                        self.logger.info(f"✅ Using direct IB connection: {ib_app is not None}")
+                else:
+                    self.logger.error("❌ No IB connection available - self.ib_connection is None")
+                
+                # Final check before passing to engine
+                if ib_app:
+                    self.logger.info("✅ Passing IB app to trading engine")
+                else:
+                    self.logger.error("❌ ib_app is None - trading engine will use mock data")
                 
                 engine.initialize_components(ib_app)
                 
@@ -376,10 +462,57 @@ class TradingSystemGUI:
                 
             except Exception as e:
                 self.logger.error(f"Backtest failed: {e}")
+                # Add more detailed error info
+                import traceback
+                self.logger.error(f"Backtest traceback: {traceback.format_exc()}")
                 self.root.after(0, lambda: self.on_backtest_error(str(e)))
         
         # Start backtest in background thread
         threading.Thread(target=backtest_thread, daemon=True).start()
+
+    def debug_connection_status(self):
+        """Debug method to check IB connection status"""
+        print("=== IB CONNECTION DEBUG ===")
+        print(f"is_connected: {self.is_connected}")
+        print(f"ib_connection exists: {self.ib_connection is not None}")
+        
+        if self.ib_connection:
+            print(f"ib_connection type: {type(self.ib_connection)}")
+            if isinstance(self.ib_connection, tuple):
+                app, gateway = self.ib_connection
+                print(f"app exists: {app is not None}")
+                print(f"gateway exists: {gateway is not None}")
+                if app:
+                    print(f"app.isConnected(): {app.isConnected()}")
+                    print(f"app type: {type(app)}")
+            else:
+                print(f"Direct connection: {self.ib_connection}")
+        else:
+            print("ib_connection is None!")
+        print("=== END DEBUG ===")
+
+    def test_ib_connection_before_backtest(self):
+        """Test IB connection before running backtest"""
+        if not self.ib_connection:
+            messagebox.showerror("No IB Connection", 
+                            "IB connection object is None!\n"
+                            "Try disconnecting and reconnecting.")
+            return False
+        
+        try:
+            if isinstance(self.ib_connection, tuple):
+                app, gateway = self.ib_connection
+                if not app or not app.isConnected():
+                    messagebox.showerror("IB Connection Lost", 
+                                    "IB app is not connected!\n" 
+                                    "Try disconnecting and reconnecting.")
+                    return False
+            return True
+        except Exception as e:
+            messagebox.showerror("IB Connection Error", 
+                            f"Error checking IB connection: {e}\n"
+                            "Try disconnecting and reconnecting.")
+            return False
     
     def on_backtest_complete(self, results):
         """Handle backtest completion"""
