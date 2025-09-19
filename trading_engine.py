@@ -212,9 +212,19 @@ class TradingEngine:
                 self.session_history = self.session_history[-50:]
     
     def run_backtest(self, symbols: List[str] = None, 
-                start_date: str = None, end_date: str = None) -> Dict[str, any]:
+                start_date: str = None, end_date: str = None,
+                strategy_config: Dict = None) -> Dict[str, any]:  # ← Add this parameter
         """
         Run historical backtest
+        
+        Args:
+            symbols: List of symbols to backtest (uses config default if None)
+            start_date: Start date (YYYY-MM-DD)
+            end_date: End date (YYYY-MM-DD)
+            strategy_config: Visual strategy configuration (if using visual strategy)
+            
+        Returns:
+            Backtest results dictionary
         """
         
         if not self.start_session("backtest"):
@@ -229,7 +239,25 @@ class TradingEngine:
                 
                 self.logger.info(f"Backtest parameters: symbols={symbols}, start={start_date}, end={end_date}")
                 
-                # CRITICAL: Log IB connection status
+                # CRITICAL: Check for visual strategy configuration
+                visual_strategy_executor = None
+                if strategy_config and strategy_config.get("strategy_type") == "visual_generated":
+                    self.logger.info("🎨 VISUAL STRATEGY DETECTED!")
+                    self.logger.info(f"Strategy name: {strategy_config.get('strategy_name')}")
+                    self.logger.info(f"Entry conditions: {len(strategy_config.get('entry_conditions', []))}")
+                    self.logger.info(f"Exit conditions: {len(strategy_config.get('exit_conditions', []))}")
+                    
+                    try:
+                        from visual_strategy_executor import VisualStrategyExecutor
+                        visual_strategy_executor = VisualStrategyExecutor(self.config, strategy_config)
+                        self.logger.info("✅ Visual strategy executor created successfully")
+                    except Exception as e:
+                        self.logger.error(f"❌ Failed to create visual strategy executor: {e}")
+                        return {"error": f"Visual strategy initialization failed: {e}"}
+                else:
+                    self.logger.info("📊 Using DEFAULT ADX strategy")
+                
+                # Log IB connection status
                 if self.ib_app:
                     self.logger.info("✅ USING REAL IB DATA - IB connection available")
                 else:
@@ -239,15 +267,10 @@ class TradingEngine:
                 self.perf_logger.start_timer("data_fetch")
                 
                 if self.ib_app:
-                    # Try to fetch from IB
-                    self.logger.info("Attempting to fetch real market data from IB...")
                     try:
                         data_by_symbol = self.data_manager.get_multiple_symbols(symbols)
-                        
-                        # Validate we got real data
                         if data_by_symbol and any(not df.empty for df in data_by_symbol.values()):
                             self.logger.info("✅ Successfully fetched REAL IB data")
-                            # Log data details
                             for symbol, df in data_by_symbol.items():
                                 if not df.empty:
                                     start_actual = df.index.min().strftime('%Y-%m-%d')
@@ -256,12 +279,10 @@ class TradingEngine:
                         else:
                             self.logger.error("❌ IB data fetch returned empty - falling back to mock")
                             data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
-                            
                     except Exception as e:
                         self.logger.error(f"❌ IB data fetch failed: {e} - falling back to mock")
                         data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
                 else:
-                    # Generate mock data
                     self.logger.warning("⚠️ Generating MOCK data (not real market data)")
                     data_by_symbol = self._generate_mock_data(symbols, start_date, end_date)
                 
@@ -270,12 +291,26 @@ class TradingEngine:
                 if not data_by_symbol:
                     return {"error": "No data available for backtest"}
                 
-                # Run backtest simulation
-                results = self._run_backtest_simulation(data_by_symbol, start_date, end_date)
+                # Run backtest simulation with visual strategy
+                results = self._run_backtest_simulation(data_by_symbol, start_date, end_date, visual_strategy_executor)
                 
-                # Add data source info to results
-                results["data_source"] = "IB_REAL" if self.ib_app else "MOCK"
-                results["data_warning"] = None if self.ib_app else "⚠️ Using mock data - results not realistic"
+                # Add strategy info to results
+                if visual_strategy_executor:
+                    results["strategy_info"] = {
+                        "type": "visual_generated",
+                        "name": visual_strategy_executor.strategy_name,
+                        "entry_conditions": len(visual_strategy_executor.entry_conditions),
+                        "exit_conditions": len(visual_strategy_executor.exit_conditions)
+                    }
+                    results["data_source"] = "VISUAL_STRATEGY"
+                    self.logger.info(f"✅ Backtest completed with VISUAL STRATEGY: {visual_strategy_executor.strategy_name}")
+                else:
+                    results["strategy_info"] = {
+                        "type": "default_adx",
+                        "name": "ADX Breakout Strategy"
+                    }
+                    results["data_source"] = "DEFAULT_STRATEGY"
+                    self.logger.info("✅ Backtest completed with DEFAULT ADX strategy")
                 
                 # Export results
                 if self.portfolio_manager:
@@ -292,7 +327,8 @@ class TradingEngine:
 
     
     def _run_backtest_simulation(self, data_by_symbol: Dict[str, pd.DataFrame], 
-                                start_date: str = None, end_date: str = None) -> Dict[str, any]:
+                            start_date: str = None, end_date: str = None,
+                            visual_strategy_executor=None) -> Dict[str, any]:
         """Run the actual backtest simulation"""
         
         # Clean data preparation - NO FORWARD FILLING OF OHLC
@@ -314,6 +350,14 @@ class TradingEngine:
         # Skip warmup period
         trading_dates = common_dates[self.config.WARMUP_BARS:]
         
+        # Log which strategy we're using
+        if visual_strategy_executor:
+            self.logger.info(f"🎨 Running backtest with VISUAL STRATEGY: {visual_strategy_executor.strategy_name}")
+            self.logger.info(f"Entry conditions: {len(visual_strategy_executor.entry_conditions)}")
+            self.logger.info(f"Exit conditions: {len(visual_strategy_executor.exit_conditions)}")
+        else:
+            self.logger.info("📊 Running backtest with DEFAULT ADX strategy")
+        
         self.logger.info(f"Backtesting over {len(trading_dates)} trading days")
         
         # Main backtest loop
@@ -327,17 +371,27 @@ class TradingEngine:
             for symbol, df in cleaned_data.items():
                 if current_date in df.index:
                     close_price = df.loc[current_date, "close"]
-                    if not pd.isna(close_price):  # Use pd.isna() instead of .isna()
+                    if not pd.isna(close_price):
                         current_prices[symbol] = close_price
             
             # Update portfolio equity
             self.portfolio_manager.update_equity(current_prices)
             
-            # Check for exit signals first
-            self._process_exit_signals(cleaned_data, current_date, i, trading_dates)
+            # Process exits first
+            if visual_strategy_executor:
+                # USE VISUAL STRATEGY for exits
+                self._process_visual_exit_signals(cleaned_data, current_date, visual_strategy_executor, current_prices)
+            else:
+                # Use original exit logic
+                self._process_exit_signals(cleaned_data, current_date, i, trading_dates)
             
-            # Check for entry signals
-            self._process_entry_signals(cleaned_data, current_date, i, trading_dates)
+            # Process entries
+            if visual_strategy_executor:
+                # USE VISUAL STRATEGY for entries
+                self._process_visual_entry_signals(cleaned_data, current_date, visual_strategy_executor, current_prices)
+            else:
+                # Use original entry logic
+                self._process_entry_signals(cleaned_data, current_date, i, trading_dates)
             
             # Update session stats
             if self.current_session:
@@ -345,6 +399,97 @@ class TradingEngine:
         
         # Calculate final results
         return self._compile_backtest_results()
+    
+    def _process_visual_exit_signals(self, cleaned_data, current_date, visual_strategy_executor, current_prices):
+        """Process exit signals using visual strategy"""
+        try:
+            for symbol, df in cleaned_data.items():
+                if symbol in self.portfolio_manager.positions:
+                    # Get data up to current date for indicator calculation
+                    symbol_data = df.loc[:current_date].tail(100)  # Last 100 bars for indicators
+                    
+                    if len(symbol_data) < 20:  # Need minimum data
+                        continue
+                    
+                    # Generate exit signals
+                    exit_signals = visual_strategy_executor.generate_exit_signals(symbol_data, self.portfolio_manager.positions)
+                    
+                    if not exit_signals.empty and len(exit_signals) > 0:
+                        # Check if exit signal on current date
+                        if exit_signals.iloc[-1]:  
+                            # Execute exit using CORRECT method name
+                            exit_price = current_prices.get(symbol)
+                            if exit_price:
+                                # FIXED: Use close_position (correct method name)
+                                success = self.portfolio_manager.close_position(symbol, exit_price)
+                                if success:
+                                    self.logger.info(f"🎨 Visual exit executed: {symbol} at ${exit_price:.2f}")
+                                    
+                                    # Add to execution stats
+                                    self._execution_stats["orders_placed"] += 1
+                                else:
+                                    self.logger.warning(f"Failed to close position: {symbol}")
+                                    self._execution_stats["orders_failed"] += 1
+        
+        except Exception as e:
+            self.logger.error(f"Visual exit processing failed: {e}")
+
+    def _process_visual_entry_signals(self, cleaned_data, current_date, visual_strategy_executor, current_prices):
+        """Process entry signals using visual strategy"""
+        try:
+            for symbol, df in cleaned_data.items():
+                if symbol not in self.portfolio_manager.positions:
+                    # Get data up to current date for indicator calculation
+                    symbol_data = df.loc[:current_date].tail(100)  # Last 100 bars for indicators
+                    
+                    if len(symbol_data) < 20:  # Need minimum data
+                        continue
+                    
+                    # Generate entry signals
+                    entry_signals = visual_strategy_executor.generate_entry_signals(symbol_data)
+                    
+                    if not entry_signals.empty and len(entry_signals) > 0:
+                        # Check if entry signal on current date
+                        if entry_signals.iloc[-1]:  
+                            # Execute entry
+                            entry_price = current_prices.get(symbol)
+                            if entry_price and entry_price > 0:
+                                # Calculate position size
+                                position_value = visual_strategy_executor.get_position_size(None, self.portfolio_manager.current_equity)
+                                shares = int(position_value / entry_price)
+                                
+                                if shares > 0 and self.portfolio_manager.cash >= shares * entry_price:
+                                    # Calculate stop loss and take profit
+                                    stop_loss = visual_strategy_executor.get_stop_loss(entry_price, None)
+                                    take_profit = visual_strategy_executor.get_take_profit(entry_price, None)
+                                    
+                                    # Create strategy data for position
+                                    strategy_data = {
+                                        "strategy_name": f"Visual: {visual_strategy_executor.strategy_name}",
+                                        "signal_strength": 0.8,  # Default
+                                        "signal_confidence": 0.8,  # Default
+                                        "stop_loss": stop_loss,
+                                        "take_profit": take_profit,
+                                        "entry_reason": "Visual Strategy Signal"
+                                    }
+                                    
+                                    # FIXED: Use add_position (correct method name)
+                                    success = self.portfolio_manager.add_position(
+                                        symbol, shares, entry_price, strategy_data
+                                    )
+                                    
+                                    if success:
+                                        self.logger.info(f"🎨 Visual entry executed: {symbol} - {shares} shares at ${entry_price:.2f}")
+                                        self.logger.info(f"   Stop Loss: ${stop_loss:.2f}, Take Profit: ${take_profit:.2f}")
+                                        
+                                        # Add to execution stats
+                                        self._execution_stats["orders_placed"] += 1
+                                    else:
+                                        self.logger.warning(f"Failed to add position: {symbol}")
+                                        self._execution_stats["orders_failed"] += 1
+        
+        except Exception as e:
+            self.logger.error(f"Visual entry processing failed: {e}")
     
     def _prepare_backtest_data(self, data_by_symbol: Dict[str, pd.DataFrame], 
                               start_date: str = None, end_date: str = None) -> Dict[str, pd.DataFrame]:

@@ -18,7 +18,7 @@ from config import TradingConfig, get_config_for_mode
 from logger import setup_logging, get_logger
 from trading_engine import create_trading_engine, TradingMode
 from gui_components import (
-    ConnectionTab, StrategyTab, BacktestTab, 
+    ConnectionTab, EnhancedStrategyTab, BacktestTab, 
     LiveTradingTab, MonitoringTab, LogViewer
 )
 
@@ -157,6 +157,75 @@ class TradingSystemGUI:
         
         # Bind tab change event
         self.notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)
+
+    def test_visual_strategy_callback(self, strategy_params):
+        """Test strategy created with visual builder"""
+        self.logger.info(f"🎨 Visual strategy test requested: {strategy_params['strategy_name']}")
+        
+        try:
+            # Log the strategy configuration for debugging
+            self.logger.info(f"Entry conditions: {len(strategy_params.get('entry_conditions', []))}")
+            self.logger.info(f"Exit conditions: {len(strategy_params.get('exit_conditions', []))}")
+            self.logger.info(f"Risk settings: {strategy_params.get('risk_settings', {})}")
+            
+            # Convert visual strategy to backtest parameters
+            backtest_params = {
+                "symbols": self.config.SYMBOLS,
+                "start_date": "2023-01-01",
+                "end_date": "2024-12-31",
+                "initial_capital": self.config.ACCOUNT_SIZE,
+                # CRITICAL: Add strategy_config to pass visual strategy
+                "strategy_config": strategy_params  # ← This is the key addition!
+            }
+            
+            # Show confirmation dialog with strategy details
+            entry_desc = self._describe_conditions(strategy_params.get('entry_conditions', []))
+            exit_desc = self._describe_conditions(strategy_params.get('exit_conditions', []))
+            
+            result = messagebox.askyesno(
+                "Test Visual Strategy",
+                f"🎨 Test strategy: '{strategy_params['strategy_name']}'?\n\n"
+                f"📈 Entry: {entry_desc}\n"
+                f"📉 Exit: {exit_desc}\n\n"
+                f"Period: 2023-01-01 to 2024-12-31\n"
+                f"Symbols: {', '.join(self.config.SYMBOLS[:3])}{'...' if len(self.config.SYMBOLS) > 3 else ''}"
+            )
+            
+            if result:
+                # IMPORTANT: Log that we're using visual strategy
+                self.logger.info("🚀 Starting backtest with VISUAL STRATEGY")
+                
+                # Switch to backtest tab to show results
+                self.notebook.select(self.backtest_frame)
+                
+                # Run backtest with visual strategy configuration
+                self.run_backtest_callback(backtest_params)
+            
+        except Exception as e:
+            self.logger.error(f"Visual strategy test failed: {e}")
+            messagebox.showerror("Test Failed", f"Failed to test visual strategy:\n{e}")
+
+    def _describe_conditions(self, conditions):
+        """Helper method to describe conditions in human-readable format"""
+        if not conditions:
+            return "None"
+        
+        descriptions = []
+        for condition in conditions:
+            indicator = condition.get('indicator', '')
+            operator = condition.get('operator', '')
+            target = condition.get('target', '')
+            params = condition.get('parameters', {})
+            
+            if params:
+                param_str = ",".join(params.values())
+                indicator_str = f"{indicator}({param_str})"
+            else:
+                indicator_str = indicator
+                
+            descriptions.append(f"{indicator_str} {operator} {target}")
+        
+        return " AND ".join(descriptions)
     
     def setup_status_bar(self):
         """Setup status bar at bottom"""
@@ -206,12 +275,20 @@ class TradingSystemGUI:
                 self.on_connection_change
             )
             
-            # Strategy tab
-            self.strategy_tab = StrategyTab(
-                self.strategy_frame, 
-                self.config,
-                self.on_strategy_change
+            # # Strategy tab
+            # self.strategy_tab = StrategyTab(
+            #     self.strategy_frame, 
+            #     self.config,
+            #     self.on_strategy_change
+            # )
+
+            # New: 
+            self.strategy_tab = EnhancedStrategyTab(
+                self.strategy_frame,
+                self.config, 
+                self.test_visual_strategy_callback
             )
+            
             
             # Backtest tab
             self.backtest_tab = BacktestTab(
@@ -385,76 +462,49 @@ class TradingSystemGUI:
             self.backtest_tab.run_backtest()
     
     def run_backtest_callback(self, params):
-        """Callback for backtest execution with enhanced IB connection debugging"""
-
-            # TEST IB CONNECTION FIRST
+        """Callback for backtest execution with connection validation"""
+        
+        # TEST IB CONNECTION FIRST
         if not self.test_ib_connection_before_backtest():
-            # Connection test failed - abort backtest
             self.update_status("❌ IB Connection Test Failed")
-            
-            # Reset backtest tab UI
             if hasattr(self, 'backtest_tab'):
                 self.backtest_tab.progress.stop()
                 self.backtest_tab.run_btn.config(state="normal", text="🚀 Run Backtest")
             return
         
-        # Connection is good, proceed with backtest
-        self.logger.info("✅ IB connection validated - starting backtest")
-
+        # Check if this is a visual strategy
+        strategy_config = params.get("strategy_config")
+        if strategy_config:
+            self.logger.info(f"🎨 Running backtest with VISUAL STRATEGY: {strategy_config.get('strategy_name')}")
+        else:
+            self.logger.info("📊 Running backtest with DEFAULT strategy")
+        
         def backtest_thread():
             try:
                 self.update_status("📊 Running backtest...")
                 
-                # DEBUG: Check IB connection status
-                self.logger.info(f"Backtest starting - checking IB connection:")
-                self.logger.info(f"  self.is_connected: {self.is_connected}")
-                self.logger.info(f"  self.ib_connection: {self.ib_connection is not None}")
-                
-                if self.ib_connection:
-                    self.logger.info(f"  IB connection type: {type(self.ib_connection)}")
-                    if isinstance(self.ib_connection, tuple):
-                        app, gateway = self.ib_connection
-                        self.logger.info(f"  IB app: {app is not None}")
-                        self.logger.info(f"  IB gateway: {gateway is not None}")
-                        if app:
-                            self.logger.info(f"  IB app connected: {app.isConnected()}")
-                
                 # Create trading engine
-                engine = create_trading_engine("backtest", {
+                engine_config = {
                     "SYMBOLS": params.get("symbols", self.config.SYMBOLS),
                     "START_DATE": params.get("start_date"),
                     "ACCOUNT_SIZE": params.get("initial_capital", self.config.ACCOUNT_SIZE)
-                })
+                }
                 
-                # Initialize with IB connection if available - WITH DEBUGGING
+                engine = create_trading_engine("backtest", engine_config)
+                
+                # Initialize with IB connection
                 ib_app = None
                 if self.ib_connection:
-                    if isinstance(self.ib_connection, tuple):
-                        ib_app, gateway = self.ib_connection
-                        self.logger.info(f"✅ Extracted IB app from tuple: {ib_app is not None}")
-                        if ib_app and hasattr(ib_app, 'isConnected'):
-                            self.logger.info(f"✅ IB app is connected: {ib_app.isConnected()}")
-                        else:
-                            self.logger.error("❌ IB app missing or no isConnected method")
-                    else:
-                        ib_app = self.ib_connection
-                        self.logger.info(f"✅ Using direct IB connection: {ib_app is not None}")
-                else:
-                    self.logger.error("❌ No IB connection available - self.ib_connection is None")
-                
-                # Final check before passing to engine
-                if ib_app:
-                    self.logger.info("✅ Passing IB app to trading engine")
-                else:
-                    self.logger.error("❌ ib_app is None - trading engine will use mock data")
+                    ib_app, _ = self.ib_connection
                 
                 engine.initialize_components(ib_app)
                 
-                # Run backtest
+                # CRITICAL: Pass strategy_config to run_backtest
                 results = engine.run_backtest(
                     symbols=params.get("symbols"),
                     start_date=params.get("start_date"),
-                    end_date=params.get("end_date")
+                    end_date=params.get("end_date"),
+                    strategy_config=strategy_config  # ← Pass visual strategy config
                 )
                 
                 # Update UI on main thread
@@ -462,7 +512,6 @@ class TradingSystemGUI:
                 
             except Exception as e:
                 self.logger.error(f"Backtest failed: {e}")
-                # Add more detailed error info
                 import traceback
                 self.logger.error(f"Backtest traceback: {traceback.format_exc()}")
                 self.root.after(0, lambda: self.on_backtest_error(str(e)))

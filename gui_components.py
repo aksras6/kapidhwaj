@@ -16,6 +16,7 @@ from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 from config import TradingConfig
 from logger import get_logger
+from visual_strategy_builder import EnhancedStrategyTab
 
 
 class ConnectionTab:
@@ -543,6 +544,256 @@ if __name__ == "__main__":
                 return False
         return True
 
+# class EnhancedStrategyTab:
+#     """Enhanced Strategy Tab with Visual Builder"""
+    
+#     def __init__(self, parent, config, strategy_callback):
+#         self.parent = parent
+#         self.config = config
+#         self.strategy_callback = strategy_callback
+#         self.logger = get_logger("enhanced_strategy")
+        
+#         self.setup_ui()
+    
+#     def setup_ui(self):
+#         """Setup enhanced strategy tab with mode switcher"""
+        
+#         # Main container
+#         main_frame = ttk.Frame(self.parent)
+#         main_frame.pack(fill="both", expand=True, padx=10, pady=10)
+        
+#         # Top toolbar with mode switcher
+#         toolbar = ttk.Frame(main_frame)
+#         toolbar.pack(fill="x", pady=(0, 10))
+        
+#         ttk.Label(toolbar, text="Strategy Editor Mode:", font=("Arial", 10, "bold")).pack(side="left", padx=(0, 10))
+        
+#         self.mode_var = tk.StringVar(value="visual")
+#         mode_frame = ttk.Frame(toolbar)
+#         mode_frame.pack(side="left")
+        
+#         ttk.Radiobutton(
+#             mode_frame, 
+#             text="🎨 Visual Builder", 
+#             variable=self.mode_var, 
+#             value="visual",
+#             command=self.switch_mode
+#         ).pack(side="left", padx=(0, 10))
+        
+#         ttk.Radiobutton(
+#             mode_frame,
+#             text="🐍 Code Editor", 
+#             variable=self.mode_var,
+#             value="code",
+#             command=self.switch_mode
+#         ).pack(side="left")
+        
+#         # Content area
+#         self.content_frame = ttk.Frame(main_frame)
+#         self.content_frame.pack(fill="both", expand=True)
+        
+#         # Initialize visual builder
+#         self.visual_builder = VisualStrategyBuilder(
+#             self.content_frame, 
+#             self.config,
+#             strategy_callback=self.test_visual_strategy
+#         )
+        
+#         # Initialize code editor (hidden initially)
+#         self.code_editor_frame = ttk.Frame(self.content_frame)
+#         self.setup_code_editor()
+        
+#         # Start with visual mode
+#         self.switch_mode()
+    
+#     def setup_code_editor(self):
+#         """Setup traditional code editor"""
+        
+#         # Toolbar
+#         toolbar = ttk.Frame(self.code_editor_frame)
+#         toolbar.pack(fill="x", pady=(0, 10))
+        
+#         ttk.Button(toolbar, text="New", command=self.new_strategy).pack(side="left", padx=(0, 5))
+#         ttk.Button(toolbar, text="Open", command=self.open_strategy).pack(side="left", padx=(0, 5))
+#         ttk.Button(toolbar, text="Save", command=self.save_strategy).pack(side="left", padx=(0, 5))
+#         ttk.Button(toolbar, text="Test", command=self.test_code_strategy).pack(side="left", padx=(0, 10))
+        
+#         # Code editor
+#         self.code_editor = scrolledtext.ScrolledText(
+#             self.code_editor_frame,
+#             wrap="none",
+#             font=("Consolas", 10),
+#             undo=True,
+#             maxundo=50,
+#         )
+#         self.code_editor.pack(fill="both", expand=True)
+        
+#         # Load default strategy template
+#         self.load_default_strategy()
+    
+#     def switch_mode(self):
+#         """Switch between visual and code modes"""
+#         mode = self.mode_var.get()
+        
+#         # Hide all frames
+#         for widget in self.content_frame.winfo_children():
+#             widget.pack_forget()
+        
+#         if mode == "visual":
+#             self.visual_builder.main_notebook.pack(fill="both", expand=True)
+#         else:
+#             self.code_editor_frame.pack(fill="both", expand=True)
+        
+#         self.logger.info(f"Switched to {mode} mode")
+    
+#     def test_visual_strategy(self, strategy_params):
+#         """Test strategy created with visual builder"""
+#         self.logger.info("Testing visual strategy...")
+        
+#         # Convert visual strategy to format expected by backtesting engine
+#         backtest_params = {
+#             "strategy_type": "visual_generated",
+#             "strategy_name": strategy_params["strategy_name"],
+#             "entry_conditions": strategy_params["entry_conditions"],
+#             "exit_conditions": strategy_params["exit_conditions"],
+#             "risk_settings": strategy_params["risk_settings"]
+#         }
+        
+#         if self.strategy_callback:
+#             self.strategy_callback(backtest_params)
+    
+#     def test_code_strategy(self):
+#         """Test manually coded strategy"""
+#         code = self.code_editor.get("1.0", "end-1c")
+        
+#         backtest_params = {
+#             "strategy_type": "custom_code",
+#             "strategy_code": code
+#         }
+        
+#         if self.strategy_callback:
+#             self.strategy_callback(backtest_params)
+    
+#     def new_strategy(self):
+#         """Create new strategy"""
+#         self.code_editor.delete("1.0", "end")
+#         self.load_default_strategy()
+    
+#     def open_strategy(self):
+#         """Open existing strategy"""
+#         from tkinter import filedialog
+        
+#         filename = filedialog.askopenfilename(
+#             title="Open Strategy",
+#             filetypes=[("Python files", "*.py"), ("JSON templates", "*.json"), ("All files", "*.*")]
+#         )
+        
+#         if filename:
+#             try:
+#                 with open(filename, 'r') as f:
+#                     content = f.read()
+                
+#                 if filename.endswith('.json'):
+#                     # Load as visual template
+#                     self.mode_var.set("visual")
+#                     self.switch_mode()
+#                     self.visual_builder.load_template(filename)
+#                 else:
+#                     # Load as code
+#                     self.mode_var.set("code")
+#                     self.switch_mode()
+#                     self.code_editor.delete("1.0", "end")
+#                     self.code_editor.insert("1.0", content)
+                
+#             except Exception as e:
+#                 messagebox.showerror("Error", f"Failed to open file: {e}")
+    
+#     def save_strategy(self):
+#         """Save current strategy"""
+#         from tkinter import filedialog
+        
+#         if self.mode_var.get() == "visual":
+#             self.visual_builder.save_template()
+#         else:
+#             filename = filedialog.asksaveasfilename(
+#                 title="Save Strategy",
+#                 defaultextension=".py",
+#                 filetypes=[("Python files", "*.py"), ("All files", "*.*")]
+#             )
+            
+#             if filename:
+#                 try:
+#                     code = self.code_editor.get("1.0", "end-1c")
+#                     with open(filename, 'w') as f:
+#                         f.write(code)
+#                     messagebox.showinfo("Saved", f"Strategy saved to {filename}")
+#                 except Exception as e:
+#                     messagebox.showerror("Error", f"Failed to save file: {e}")
+    
+#     def load_default_strategy(self):
+#         """Load default strategy template"""
+#         default_strategy = '''"""
+# ADX Breakout Strategy Template
+
+# Customize this strategy or switch to Visual Builder mode
+# for drag-and-drop strategy creation.
+# """
+
+# import pandas as pd
+# import numpy as np
+
+# class CustomStrategy:
+#     """Custom trading strategy"""
+    
+#     def __init__(self, config):
+#         self.config = config
+#         self.name = "Custom ADX Strategy"
+    
+#     def generate_entry_signals(self, data):
+#         """Generate buy/sell entry signals"""
+        
+#         # Example: ADX breakout strategy
+#         adx = self.calculate_adx(data, 14)
+#         sma_20 = data['close'].rolling(20).mean()
+        
+#         # Entry conditions
+#         entry_signals = (
+#             (adx > 25) &  # Strong trend
+#             (data['close'] > sma_20) &  # Above moving average
+#             (data['volume'] > data['volume'].rolling(10).mean())  # Volume confirmation
+#         )
+        
+#         return entry_signals
+    
+#     def generate_exit_signals(self, data, positions):
+#         """Generate exit signals"""
+        
+#         sma_20 = data['close'].rolling(20).mean()
+        
+#         # Exit when price falls below moving average
+#         exit_signals = data['close'] < sma_20
+        
+#         return exit_signals
+    
+#     def calculate_adx(self, data, period=14):
+#         """Calculate ADX indicator"""
+#         # Implement your ADX calculation here
+#         # This is a placeholder
+#         return pd.Series([25] * len(data), index=data.index)
+    
+#     def get_position_size(self, signal, portfolio_value):
+#         """Calculate position size"""
+#         return portfolio_value * 0.05  # 5% of portfolio
+    
+#     def get_stop_loss(self, entry_price, signal):
+#         """Calculate stop loss"""
+#         return entry_price * 0.98  # 2% stop loss
+    
+#     def get_take_profit(self, entry_price, signal):
+#         """Calculate take profit"""
+#         return entry_price * 1.06  # 6% take profit
+# '''
+#         self.code_editor.insert("1.0", default_strategy)
 
 class BacktestTab:
     """Backtesting tab."""
